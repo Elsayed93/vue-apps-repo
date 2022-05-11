@@ -1,0 +1,9 @@
+{
+    "users": [
+        {
+            "id": 1,
+            "name": "user1",
+            "author": "user1@test.com"
+        }
+    ]
+}
