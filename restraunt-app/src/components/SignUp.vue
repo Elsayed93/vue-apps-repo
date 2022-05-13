@@ -19,6 +19,7 @@
           class="form-control"
           id="exampleInputEmail1"
           aria-describedby="emailHelp"
+          v-model="email"
         />
         <div id="emailHelp" class="form-text">
           We'll never share your email with anyone else.
@@ -31,26 +32,63 @@
           type="password"
           class="form-control"
           id="exampleInputPassword1"
+          v-model="password"
         />
       </div>
-      <div class="mb-3 col-md-6 form-check">
-        <input type="checkbox" class="form-check-input" id="exampleCheck1" />
-        <label class="form-check-label" for="exampleCheck1">Check me out</label>
-      </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
+
+      <button type="submit" class="btn btn-primary" @click="signUp">
+        Submit
+      </button>
     </div>
+  </div>
+  <div>
+    <p>{{ userInfo.email }}</p>
+    <p>{{ userInfo.password }}</p>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "SignUp",
+  data() {
+    return {
+      email: "",
+      password: "",
+      userInfo: {},
+    };
+  },
+
+  methods: {
+    signUp() {
+      console.log("signup", this.email, this.password);
+      // Send a POST request
+      let user = axios({
+        method: "post",
+        url: "http://localhost:3000/users",
+
+        data: {
+          email: this.email,
+          password: this.password,
+        },
+      });
+
+      user.then((res) => {
+        console.log(res);
+        localStorage.setItem("user_info", JSON.stringify(res));
+      });
+
+      let userInfo = localStorage.getItem("user_info");
+      this.userInfo = JSON.parse(userInfo).data;
+    },
+  },
 };
 </script>
 
 <style>
 .upper-subcontainer {
-  margin: 5rem  auto 0;
+  margin: 5rem auto 0;
   /* margin-top: 5rem; */
   /* border: solid; */
   width: 50%;
