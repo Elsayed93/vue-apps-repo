@@ -24,6 +24,10 @@
         <div id="emailHelp" class="form-text">
           We'll never share your email with anyone else.
         </div>
+
+        <div id="email-error" class="er-color">
+          {{ emailError }}
+        </div>
       </div>
 
       <div class="mb-3 col-md-6">
@@ -34,16 +38,21 @@
           id="exampleInputPassword1"
           v-model="password"
         />
+        <div id="email-error" class="er-color">
+          {{ passwordError }}
+        </div>
       </div>
 
-      <button type="submit" class="btn btn-primary" @click="signUp">
-        Submit
-      </button>
+      <div class="bottom-subcontainer">
+        <button type="submit" class="btn btn-primary" @click="signUp">
+          Sign Up
+        </button>
+
+        <router-link :to="{ name: 'Login' }" style="margin-left: 1rem">
+          Log In Page
+        </router-link>
+      </div>
     </div>
-  </div>
-  <div>
-    <p>{{ userInfo.email }}</p>
-    <p>{{ userInfo.password }}</p>
   </div>
 </template>
 
@@ -56,52 +65,62 @@ export default {
     return {
       email: "",
       password: "",
-      userInfo: {},
+      emailError: null,
+      passwordError: null,
     };
+  },
+
+  mounted() {
+    let user = localStorage.getItem("user_info");
+
+    if (user) {
+      this.$router.push({ name: "home" });
+    }
   },
 
   methods: {
     signUp() {
-      console.log("signup", this.email, this.password);
-      // Send a POST request
-      let user = axios({
-        method: "post",
-        url: "http://localhost:3000/users",
+      this.emailError = null;
+      this.passwordError = null;
 
-        data: {
-          email: this.email,
-          password: this.password,
-        },
-      });
+      // check email and password
+      if (this.email == "") {
+        this.emailError = "Please Enter Your Email";
+      }
+      console.log(this.emailError);
 
-      user.then((res) => {
-        console.log(res);
-        localStorage.setItem("user_info", JSON.stringify(res));
-      });
+      if (this.password == "") {
+        this.passwordError = "Please Enter Your Password";
+      }
 
-      let userInfo = localStorage.getItem("user_info");
-      this.userInfo = JSON.parse(userInfo).data;
+      console.log(this.emailError == null && this.passwordError == null);
+      if (this.emailError == null && this.passwordError == null) {
+        // Send a POST request
+        let user = axios({
+          method: "post",
+          url: "http://localhost:3000/users",
+
+          data: {
+            email: this.email,
+            password: this.password,
+          },
+        });
+
+        user
+          .then((res) => {
+            localStorage.setItem("user_info", JSON.stringify(res));
+          })
+          .then(() => {
+            this.$router.push({ name: "home" });
+          });
+      }
     },
   },
 };
 </script>
 
 <style>
-.upper-subcontainer {
-  margin: 5rem auto 0;
-  /* margin-top: 5rem; */
-  /* border: solid; */
-  width: 50%;
-  text-align: center;
-}
-
-.logo {
-  width: 20%;
-}
-
-.form-container {
-  position: relative;
-  left: 325px;
-  margin-top: 5rem;
+.er-color {
+  color: red;
 }
 </style>
