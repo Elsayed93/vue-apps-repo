@@ -2,22 +2,19 @@
   <main>
     <div class="home-title">
       <Header />
-
-      <div class="content">
-        <h1>Home PAge , Welcome ...</h1>
-      </div>
+      <Content page="Home"/>
     </div>
   </main>
 </template>
 
 <script>
-import SignUp from "../components/SignUp.vue";
 import Header from "../components/Header.vue";
+import Content from "../components/Content.vue";
 
 export default {
   components: {
-    SignUp,
     Header,
+    Content,
   },
   mounted() {
     let user = localStorage.getItem("user_info");
@@ -33,7 +30,7 @@ export default {
 <style>
 .home-title {
   margin: 0rem auto;
-  width: fit-content;
+  /* width: fit-content; */
   text-align: center;
 }
 
@@ -44,7 +41,9 @@ export default {
 /* for header component */
 .home-nav {
   display: flex;
-  justify-content: space-between;
+  width: 50%;
+  margin: 0 auto;
+  justify-content: center;
   background-color: #4e4e4e;
   color: white;
   border-radius: 0.25rem;

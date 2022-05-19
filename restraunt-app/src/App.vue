@@ -42,4 +42,8 @@ import { RouterLink, RouterView } from "vue-router";
 .form-container div {
   margin: auto;
 }
+
+.content {
+  margin-bottom: 5rem;
+}
 </style>
