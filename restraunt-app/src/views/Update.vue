@@ -3,7 +3,7 @@
     <div class="home-title">
       <Header />
 
-      <Content page="Update"/>
+      <Content page="Update" @action-clicked="clickUpdate" />
     </div>
   </main>
 </template>
@@ -16,7 +16,7 @@ export default {
   name: "Update",
   components: {
     Header,
-    Content
+    Content,
   },
   mounted() {
     let user = localStorage.getItem("user_info");
@@ -24,6 +24,11 @@ export default {
     if (!user) {
       this.$router.push({ name: "Login" });
     }
+  },
+  methods: {
+    clickUpdate() {
+      alert("updated");
+    },
   },
 };
 </script>

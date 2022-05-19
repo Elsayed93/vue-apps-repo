@@ -2,7 +2,7 @@
   <main>
     <div class="home-title">
       <Header />
-      <Content page="Add"/> 
+      <Content page="Add" @action-clicked="addClick" />
     </div>
   </main>
 </template>
@@ -15,7 +15,7 @@ export default {
   name: "Add",
   components: {
     Header,
-    Content
+    Content,
   },
   mounted() {
     let user = localStorage.getItem("user_info");
@@ -23,6 +23,11 @@ export default {
     if (!user) {
       this.$router.push({ name: "Login" });
     }
+  },
+  methods: {
+    addClick() {
+      alert("add clicked");
+    },
   },
 };
 </script>

@@ -2,19 +2,19 @@
   <main>
     <div class="home-title">
       <Header />
-      <Content page="Home"/>
+      <!-- <Content page="Home" @="toggleHelpText"/> -->
     </div>
   </main>
 </template>
 
 <script>
 import Header from "../components/Header.vue";
-import Content from "../components/Content.vue";
+// import Content from "../components/Content.vue";
 
 export default {
   components: {
     Header,
-    Content,
+    // Content,
   },
   mounted() {
     let user = localStorage.getItem("user_info");
