@@ -3,8 +3,14 @@
     <div class="home-title">
       <Header />
       <h2 v-if="userEmail">Hello {{ userEmail }}</h2>
-      <!-- <Content page="Home" @="toggleHelpText"/> -->
 
+      <div
+        style="background-color: green; color: white"
+        class="success-added"
+        v-if="addedSuccessfully"
+      >
+        {{ addedSuccessfully }}
+      </div>
       <!-- all restaurants -->
       <div class="all-restaurants">
         <div
@@ -15,11 +21,11 @@
         >
           <div class="card" style="width: 18rem">
             <div class="card-body">
-              <h5 class="card-title">{{rest.name}}</h5>
+              <h5 class="card-title">{{ rest.name }}</h5>
               <p class="card-text">
-               {{rest.address}}
+                {{ rest.address }}
               </p>
-              <a href="#" class="card-link"> {{rest.contact}}</a>
+              <a href="#" class="card-link"> {{ rest.contact }}</a>
             </div>
           </div>
         </div>
@@ -42,6 +48,7 @@ export default {
     return {
       userEmail: null,
       restaurants: null,
+      addedSuccessfully: null,
     };
   },
   mounted() {
@@ -50,13 +57,20 @@ export default {
 
     if (!user) this.$router.push({ name: "Login" });
 
+    //
+    let added_success_message = localStorage.getItem("added-success");
+    if (added_success_message) {
+      this.addedSuccessfully = added_success_message;
+      localStorage.removeItem("added-success");
+    }
+
     // get all restaurants
     async function getUser(_this) {
       try {
         const response = await axios.get("http://localhost:3000/restaurants");
         console.log("rest", response);
         if (response.status) {
-          console.log('this', _this);
+          console.log("this", _this);
           _this.restaurants = response.data;
         }
       } catch (error) {
@@ -103,5 +117,15 @@ export default {
   color: white !important;
   background-color: grey;
   text-decoration: none;
+}
+
+.success-added {
+  background-color: green;
+  color: white;
+  padding: 0.5rem;
+  /* width: fit-content; */
+  width: 50%;
+  position: relative;
+  left: 6rem;
 }
 </style>
