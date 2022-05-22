@@ -15,5 +15,19 @@
       "password": "ww",
       "id": 3
     }
+  ],
+  "restaurants": [
+    {
+      "id": 1,
+      "name": "rest1",
+      "contact": "contact1",
+      "address": "address1"
+    },
+    {
+      "id": 2,
+      "name": "rest2",
+      "contact": "contact2",
+      "address": "address2"
+    }
   ]
 }

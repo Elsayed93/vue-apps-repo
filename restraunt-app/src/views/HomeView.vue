@@ -1,14 +1,36 @@
 <template>
-  <main>
+  <main class="container">
     <div class="home-title">
       <Header />
+      <h2 v-if="userEmail">Hello {{ userEmail }}</h2>
       <!-- <Content page="Home" @="toggleHelpText"/> -->
+
+      <!-- all restaurants -->
+      <div class="all-restaurants">
+        <div
+          class="restaurant-box"
+          v-for="rest in restaurants"
+          :key="rest"
+          style="display: inline-block; margin: 1rem"
+        >
+          <div class="card" style="width: 18rem">
+            <div class="card-body">
+              <h5 class="card-title">{{rest.name}}</h5>
+              <p class="card-text">
+               {{rest.address}}
+              </p>
+              <a href="#" class="card-link"> {{rest.contact}}</a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </main>
 </template>
 
 <script>
 import Header from "../components/Header.vue";
+import axios from "axios";
 // import Content from "../components/Content.vue";
 
 export default {
@@ -16,12 +38,33 @@ export default {
     Header,
     // Content,
   },
+  data() {
+    return {
+      userEmail: null,
+      restaurants: null,
+    };
+  },
   mounted() {
     let user = localStorage.getItem("user_info");
+    this.userEmail = JSON.parse(user)[0].email;
 
-    if (!user) {
-      this.$router.push({ name: "Login" });
+    if (!user) this.$router.push({ name: "Login" });
+
+    // get all restaurants
+    async function getUser(_this) {
+      try {
+        const response = await axios.get("http://localhost:3000/restaurants");
+        console.log("rest", response);
+        if (response.status) {
+          console.log('this', _this);
+          _this.restaurants = response.data;
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }
+
+    getUser(this);
   },
 };
 </script>
