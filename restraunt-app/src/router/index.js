@@ -28,9 +28,10 @@ const router = createRouter({
       component: Add
     },
     {
-      path: '/update-restaruant',
+      path: '/update-restaruant/:id',
       name: 'Update',
-      component: Update
+      component: Update,
+      props: true
     }
   ]
 })

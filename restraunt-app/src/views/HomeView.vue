@@ -4,6 +4,7 @@
       <Header />
       <h2 v-if="userEmail">Hello {{ userEmail }}</h2>
 
+      <!-- added message -->
       <div
         style="background-color: green; color: white"
         class="success-added"
@@ -11,6 +12,17 @@
       >
         {{ addedSuccessfully }}
       </div>
+
+      <!-- updated message -->
+      <div class="success-added" v-if="UpdatedSuccessfully">
+        {{ UpdatedSuccessfully }}
+      </div>
+
+      <!-- deleted message -->
+      <div class="success-added" v-if="deleteSuccessfully">
+        {{ deleteSuccessfully }}
+      </div>
+
       <!-- all restaurants -->
       <div class="all-restaurants">
         <div
@@ -26,6 +38,17 @@
                 {{ rest.address }}
               </p>
               <a href="#" class="card-link"> {{ rest.contact }}</a>
+              <!-- Update -->
+              <router-link
+                :to="{ name: 'Update', params: { id: rest.id } }"
+                class="card-link"
+              >
+                Edit Restaurant
+              </router-link>
+
+              <button class="card-link" @click="deleteRestaurant(rest.id)">
+                Delete Restaurant
+              </button>
             </div>
           </div>
         </div>
@@ -49,6 +72,8 @@ export default {
       userEmail: null,
       restaurants: null,
       addedSuccessfully: null,
+      UpdatedSuccessfully: null,
+      deleteSuccessfully: null,
     };
   },
   mounted() {
@@ -62,6 +87,25 @@ export default {
     if (added_success_message) {
       this.addedSuccessfully = added_success_message;
       localStorage.removeItem("added-success");
+    }
+
+    // updated message check
+    //
+    let updated_success_message = localStorage.getItem("updated-successfully");
+    console.log("updated success", updated_success_message);
+    if (updated_success_message) {
+      console.log("updated success", updated_success_message);
+      this.UpdatedSuccessfully = updated_success_message;
+      localStorage.removeItem("updated-successfully");
+    }
+
+    // deleted message check
+    //
+    let deleted_success_message = localStorage.getItem("deleted-successfully");
+    if (deleted_success_message) {
+      console.log("deleted success", deleted_success_message);
+      this.deleteSuccessfully = deleted_success_message;
+      localStorage.removeItem("deleted-successfully");
     }
 
     // get all restaurants
@@ -79,6 +123,17 @@ export default {
     }
 
     getUser(this);
+  },
+  methods: {
+    deleteRestaurant(id) {
+      axios.delete("http://localhost:3000/restaurants/" + id).then((res) => {
+        console.log("after delete", res);
+        if (res.status == 200) {
+          this.$router.go();
+          localStorage.setItem("deleted-successfully", "Deleted Successfully");
+        }
+      });
+    },
   },
 };
 </script>
